@@ -1,0 +1,14 @@
+<!--&lt;!&ndash;no controller&ndash;&gt;-->
+<!--<div class="contatiner" ng-init="people=[{name:'dave',city:'NY'},{name:'alice', city:'Boston'}, {name: 'amy', city:'portland'}]">-->
+    <!--Name: <input type="text" ng-model="name"/> {{ name | uppercase }}-->
+    <!--<ul>-->
+        <!--<li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>-->
+    <!--</ul>-->
+<!--</div>-->
+<div ng-controller="SimpleController" class="contatiner">
+    <h1>asdasda</h1>
+    <ul>
+        <li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>
+    </ul>
+    <a href="#/view2">View 2</a>
+</div>
