@@ -5,28 +5,40 @@ var msw = angular.module("meanstackwalkthrough", ['ngRoute']);
 msw.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
     $routeProvider.when('/', {
-        controller: 'SimpleController',
+        controller: 'AppCtrl',
         templateUrl: 'View1.html'
     }).when('/partial2', {
-        controller: 'SimpleController',
+        controller: 'AppCtrl',
         templateUrl: 'View2.html'
     }).otherwise({
         redirectTo: '/'
     });
         $locationProvider.html5Mode(true);
 }])
-    .factory('simpleFactory', function() {
+    .factory('simpleFactory', function($http) {
+        // $http.get('http://localhost:3000/products').then(function(res){
+        //     var factory = {};
+        //     var people = [{name:'dave',city:'NY'},
+        //         {name:'bbbbb', city:'Boston'},
+        //         {name: 'haha', city:'portland'}];
+        //     factory.getCustomers = function() {
+        //         return json;
+        //     }
+        //     return factory;
+        // });
         var factory = {};
-        var customers = ['alice', 'bob'];
+        var people = [{name:'dave',city:'NY'},
+            {name:'bbbbb', city:'Boston'},
+            {name: 'haha', city:'portland'}];
         factory.getCustomers = function() {
-            return customers;
+            return people;
         }
         return factory;
     })
     .controller("AppCtrl", function($scope, simpleFactory){
-    $scope.customers = simpleFactory.getCustomers();
+    $scope.people = simpleFactory.getCustomers();
 })
-    .controller('SimpleController', function($scope) {
+    .controller('ControllerWithoutFactory', function($scope) {
     $scope.people = [{name:'dave',city:'NY'},
         {name:'alice', city:'Boston'},
         {name: 'amy', city:'portland'}];

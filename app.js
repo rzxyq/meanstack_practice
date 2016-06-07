@@ -28,13 +28,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 // app.use(function(req,res) {
 //   var data = '<h1>hello</h1>';
 //   res.writeHead(200, {'Content-Type': 'text/html'});
 //   res.end(data);
 // })
+app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', routes);
 app.use('/users', users);
 
@@ -45,7 +45,7 @@ app.use(function(req,res, next){
   }
   next();
 });
-
+//
 app.get('/', function(req, res) {
   res.render('index', { title: 'Expressssss' });
 });
