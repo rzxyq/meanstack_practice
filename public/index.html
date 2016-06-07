@@ -7,6 +7,7 @@
 </head>
 <body>
     {{ 2+2 }}
+    <div ng-view=""></div>
     <!--no controller-->
     <div class="contatiner" ng-init="people=[{name:'dave',city:'NY'},{name:'alice', city:'Boston'}, {name: 'amy', city:'portland'}]">
         Name: <input type="text" ng-model="name"/> {{ name | uppercase }}

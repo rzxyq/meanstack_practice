@@ -1,0 +1,7 @@
+<div ng-controller="SimpleController" class="contatiner">
+    <h1>asdasda</h1>
+    <ul>
+        <li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>
+    </ul>
+    <a href="#/view2">View 2</a>
+</div>
