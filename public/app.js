@@ -35,9 +35,24 @@ msw.config(['$routeProvider', '$locationProvider',
         }
         return factory;
     })
+    .factory('complicatedFactory', function($http) {
+        var dataFactory = {};
+        dataFactory.getCustomers = function () {
+            data = $http.get('http://localhost:3000/products');
+
+            console.log(data);
+            return data;
+        };
+        return dataFactory;
+    })
     .controller("AppCtrl", function($scope, simpleFactory){
     $scope.people = simpleFactory.getCustomers();
 })
+    .controller("ComplicatedCtrl", function($scope, complicatedFactory){
+        complicatedFactory.getCustomers().success(function(response){
+            $scope.people = response;
+        });
+    })
     .controller('ControllerWithoutFactory', function($scope) {
     $scope.people = [{name:'dave',city:'NY'},
         {name:'alice', city:'Boston'},
