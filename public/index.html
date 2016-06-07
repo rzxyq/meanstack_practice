@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="meanstackwalkthrough">
+<!--np app is modulename, can be anything just need to be angular consistent-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {{ 2+2 }}
+    <!--no controller-->
+    <div class="contatiner" ng-init="people=[{name:'dave',city:'NY'},{name:'alice', city:'Boston'}, {name: 'amy', city:'portland'}]">
+        Name: <input type="text" ng-model="name"/> {{ name | uppercase }}
+        <ul>
+            <li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>
+        </ul>
+    </div>
+    <!--different styles for controller-->
+    <div ng-controller="SimpleController" class="contatiner">
+        <h1>asdasda</h1>
+        <ul>
+            <li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>
+        </ul>
+    </div>
+    <div ng-controller="AppCtrl as app">
+        <ul>
+            <li ng-repeat="product in app.products">
+                {{ products.name }}
+            </li>
+        </ul>
+    </div>
+
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="./app.js"></script>
+</body>
+</html>
