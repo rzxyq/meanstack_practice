@@ -8,6 +8,7 @@ var mongoose = require("mongoose");
 var cors = require("cors");
 var testMode = false;
 
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -46,9 +47,9 @@ app.use(function(req,res, next){
   next();
 });
 //
-app.get('/', function(req, res) {
-  res.render('index', { title: 'Expressssss' });
-});
+// app.get('/', function(req, res) {
+//   res.render('index', { title: 'Expressssss' });
+// });
 
 app.get('/products/:name', function(req, res){
   var name = req.params.name;

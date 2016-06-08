@@ -1,9 +1,9 @@
 /**
  * Created by ruoyanqin on 6/6/16.
  */
-var msw = angular.module("meanstackwalkthrough", ['ngRoute']);
-msw.config(['$routeProvider', '$locationProvider',
-    function($routeProvider, $locationProvider) {
+var msw = angular.module("meanstackwalkthrough", ['ngRoute','ui.router']);
+msw.config(
+    function($routeProvider) {
     $routeProvider.when('/', {
         controller: 'AppCtrl',
         templateUrl: 'View1.html'
@@ -13,8 +13,17 @@ msw.config(['$routeProvider', '$locationProvider',
     }).otherwise({
         redirectTo: '/'
     });
-        $locationProvider.html5Mode(true);
-}])
+        // $urlRouteProvider.otherwise('/');
+        // $stateProvider
+        //     .state('home', {
+        //         url:'/',
+        //         templateUrl: 'View1.html',
+        //     })
+        //     .state('home2', {
+        //         url:'/yeah',
+        //         templateUrl: 'View1.html',
+        //     })
+})
     .factory('simpleFactory', function($http) {
         // $http.get('http://localhost:3000/products').then(function(res){
         //     var factory = {};
@@ -38,7 +47,7 @@ msw.config(['$routeProvider', '$locationProvider',
     .factory('complicatedFactory', function($http) {
         var dataFactory = {};
         dataFactory.getCustomers = function () {
-            data = $http.get('http://localhost:3000/products');
+            data = $http.get('http://localhost:4000/products');
 
             console.log(data);
             return data;
