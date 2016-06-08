@@ -62,7 +62,7 @@ msw.config(
             $scope.people = response;
         });
     })
-    .controller('ControllerWithoutFactory', function($scope) {
+    .controller('SimpleController', function($scope) {
     $scope.people = [{name:'dave',city:'NY'},
         {name:'alice', city:'Boston'},
         {name: 'amy', city:'portland'}];
