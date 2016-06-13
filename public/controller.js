@@ -1,6 +1,7 @@
 /**
  * Created by ruoyanqin on 6/6/16.
  */
+
 var msw = angular.module("meanstackwalkthrough", ['ngRoute','ui.router']);
 msw.config(
     function($routeProvider) {

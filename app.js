@@ -51,21 +51,33 @@ app.use(function(req,res, next){
 //   res.render('index', { title: 'Expressssss' });
 // });
 
-app.get('/products/:name', function(req, res){
-  var name = req.params.name;
-  Product.findOne({name: 'macbook'}, function(err, obj){
-    if (err) console.log('cant find object');
-    else console.log(obj);
-    res.send(obj);
-  })
-  //for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
-  // // get a user with ID of 1
-  // User.findById(1, function(err, user) {
-  //   if (err) throw err;
-  //
-  //   // show the one user
-  //   console.log(user);
-  // });
+// app.get('/products/:name', function(req, res){
+//   var name = req.params.name;
+//   Product.findOne({name: 'macbook'}, function(err, obj){
+//     if (err) console.log('cant find object');
+//     else console.log(obj);
+//     res.send(obj);
+//   })
+//   //for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
+//   // // get a user with ID of 1
+//   // User.findById(1, function(err, user) {
+//   //   if (err) throw err;
+//   //
+//   //   // show the one user
+//   //   console.log(user);
+//   // });
+// })
+
+app.get('/products/:id', function(req, res){
+  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
+  // get a user with ID of 1
+  console.log(req.params.id)
+  Product.findOne({"_id": req.params.id}, function(err, user) {
+    if (err) throw err;
+    // show the one user
+    console.log(user);
+    res.send(user);
+  });
 })
 
 app.post('/users', function(req, res){
