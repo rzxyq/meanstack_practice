@@ -20,6 +20,7 @@ var userSchema = new Schema({
     updated_at: Date
 });
 
+
 // custom method to add string to end of name
 // you can create more important methods like name validations or formatting
 // you can also do queries and find similar users

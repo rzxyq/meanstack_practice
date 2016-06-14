@@ -18,6 +18,8 @@ var app = express();
 mongoose.connect('mongodb://localhost/meanstackwalkthrough');
 var User = require('./model/user');
 var Product = require('./model/product');
+var Admin = require('./model/admin');
+
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -38,6 +40,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', routes);
 app.use('/users', users);
+
 
 app.use(function(req,res, next){
   if (req.url == '/test') {
@@ -77,6 +80,46 @@ app.get('/products/:id', function(req, res){
     // show the one user
     console.log(user);
     res.send(user);
+  });
+})
+
+app.get('/admin/', function(req, res){
+  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
+  // get a user with ID of 1
+  console.log(req.params.id)
+  Admin.findById('575f0eb913bbeff7095e4474', function(err,admin) {
+    if (err) throw err;
+    // show the one user
+    console.log(admin);
+    User.findById(admin.users[0], function(err, user){console.log(user)});
+    res.send(admin);
+  });
+})
+
+app.get('/admins/:userid', function(req, res){
+  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
+  // get a user with ID of 1
+  console.log(req.params.userid)
+  console.log(typeof req.params.userid)
+  //other test value is "_id" : 575624d9afc507ea0a127a96, should be admin1 instead of 2
+
+  Admin.findOne({users:[req.params.userid]}, function(err,admin) {
+    if (err) throw err;
+    // show the one user
+    console.log(admin);
+    res.send(admin);
+  });
+})
+
+app.get('/admins2/', function(req, res){
+  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
+  // get a user with ID of 1
+  console.log(req.params.id)
+  Admin.findOne({users:['5755cb0b815d473d09f3aaa3']}, function(err,admin) {
+    if (err) throw err;
+    // show the one user
+    console.log(admin);
+    res.send(admin);
   });
 })
 
