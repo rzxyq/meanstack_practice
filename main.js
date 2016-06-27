@@ -8,25 +8,33 @@ var mongoose = require("mongoose");
 var cors = require("cors");
 var testMode = false;
 
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var config = require('./config');
 
 var app = express();
 
 //db
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.
-var uristring =
-    process.env.MONGODB_URI ||
-    'mongodb://localhost/meanstackwalkthrough';
-// Makes connection asynchronously.  Mongoose will queue up database
-// operations and release them when the connection is complete.
-mongoose.connect(uristring, function (err, res) {
-  if (err) {
-    console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+// var uristring =
+//     process.env.MONGODB_URI ||
+//     'mongodb://104.154.252.194:27017/mydb';
+// // Makes connection asynchronously.  Mongoose will queue up database
+// // operations and release them when the connection is complete.
+// mongoose.connect(uristring, function (err, res) {
+//   if (err) {
+//     console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+//   } else {
+//     console.log ('Succeeded connected to: ' + uristring);
+//   }
+// });
+// *** mongoose *** ///
+mongoose.connect(config.mongoURI[app.settings.env], function(err, res) {
+  if(err) {
+    console.log('Error connecting to the database. ' + err);
   } else {
-    console.log ('Succeeded connected to: ' + uristring);
+    console.log('Connected to Database: ' + config.mongoURI[app.settings.env]);
   }
 });
 var User = require('./model/user');
@@ -93,6 +101,17 @@ app.get('/products/:id', function(req, res){
     // show the one user
     console.log(user);
     res.send(user);
+  });
+})
+
+app.put('/products/:id', function(req, res){
+  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
+  // get a user with ID of 1
+  Product.findOne({"_id": req.params.id}, function(err, user) {
+    if (err) throw err;
+    user.name = req.body.name;
+    console.log(user);
+    res.send({UPDATED: user});
   });
 })
 
@@ -170,10 +189,22 @@ app.delete('/users/:name', function(req,res){
   var name = req.params.name;
 })
 
-app.get('/products', function(req, res) {
+app.get('/products/', function(req, res) {
   Product.find({}, function(err, products){
     res.send(products);
   })
+});
+app.post('/products/', function(req, res) {
+  var name = req.body.name;
+  var b = new Product();
+  b.name=name;
+  b.save(function(){
+    res.send({
+      SUCCESS: {
+        name: name
+      }
+    });
+  });
 });
 
 

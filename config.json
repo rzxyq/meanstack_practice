@@ -1,0 +1,6 @@
+{
+  "GCLOUD_PROJECT": "argon-magnet-134317",
+  "DATA_BACKEND": "mongodb",
+  "MONGO_URL": "mongodb://104.154.252.194:27017/mydb",
+  "MONGO_COLLECTION": "products"
+}

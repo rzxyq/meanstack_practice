@@ -4,13 +4,11 @@
     <option name="serverConfigurations">
       <list>
         <ServerConfiguration>
-          <option name="label" value="meanstackwalkthrough" />
           <option name="serverUrls">
             <list>
               <option value="localhost:27017" />
             </list>
           </option>
-          <option name="userDatabase" value="meanstackwalkthrough" />
         </ServerConfiguration>
       </list>
     </option>
