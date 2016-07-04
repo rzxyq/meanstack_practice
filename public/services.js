@@ -24,8 +24,6 @@ angular.module("meanstackwalkthrough.services", [])
         var dataFactory = {};
         dataFactory.getCustomers = function () {
             data = $http.get('http://localhost:3000/products');
-
-            console.log(data);
             return data;
         };
         return dataFactory;

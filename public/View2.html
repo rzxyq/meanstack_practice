@@ -1,6 +1,6 @@
 
 <div ng-controller="SimpleController" class="contatiner">
-    <h1>asdasda</h1>
+    <h1>view2</h1>
     Name: <input type="text" ng-model="name"/> {{ name | uppercase }}
     <ul>
         <li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>

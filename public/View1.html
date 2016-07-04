@@ -1,14 +1,17 @@
-<!--&lt;!&ndash;no controller&ndash;&gt;-->
-<!--<div class="contatiner" ng-init="people=[{name:'dave',city:'NY'},{name:'alice', city:'Boston'}, {name: 'amy', city:'portland'}]">-->
-    <!--Name: <input type="text" ng-model="name"/> {{ name | uppercase }}-->
-    <!--<ul>-->
-        <!--<li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>-->
-    <!--</ul>-->
-<!--</div>-->
-<div ng-controller="SimpleController" class="contatiner">
-    <h1>asdasda</h1>
+
+<div ng-controller="IdCtrl" class="contatiner">
+    <h1>View1</h1>
+    Name: <input type="text" ng-model="name"/> {{ name | uppercase }}
     <ul>
         <li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>
     </ul>
-    <a href="#View2.html">View 2</a>
+    <p ng-model="id">Your id is {{ id }}</p>
+    <br/>
+    Customer name:<br/>
+    <input type="text" ng-model="newCustomer.name"/>
+    <br/>
+    Customer name:<br/>
+    <input type="text" ng-model="newCustomer.city"/>
+    <br/>
+    <button ng-click="addCustomer()">Add cutomer</button>
 </div>

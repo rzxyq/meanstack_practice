@@ -6,12 +6,12 @@ angular.module("meanstackwalkthrough", ['ngRoute', 'meanstackwalkthrough.service
 
     .config(
     function($routeProvider) {
-        $routeProvider.when('/', {
-            controller: 'AppCtrl',
-            templateUrl: 'View2.html'
-        }).when('/partial2', {
+        $routeProvider.when('/view1/:id', {
             controller: 'AppCtrl',
             templateUrl: 'View1.html'
+        }).when('/view2', {
+            controller: 'AppCtrl',
+            templateUrl: 'View2.html'
         }).otherwise({
             redirectTo: '/'
         });
@@ -26,3 +26,4 @@ angular.module("meanstackwalkthrough", ['ngRoute', 'meanstackwalkthrough.service
         //         templateUrl: 'View1.html',
         //     })
     });
+
