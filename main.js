@@ -16,6 +16,7 @@ var app = express();
 var testMode = false;
 //passport
 var passport = require('passport');
+var passportlocal = require('passport-local');
 var session = require('express-session');
 
 //db
@@ -40,7 +41,24 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'mysecretkey',
+  saveUninitialized: true,
+  resave: true
+}))
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
+//passport
+passport.use(new passportlocal.Strategy(function(username, password, done){
+  if (usename === password) {
+    done(null, { id:12, name:username, password:password });
+  } else {
+    done(null, null);
+  }
+}));
+
 // app.use(function(req,res) {
 //   var data = '<h1>hello</h1>';
 //   res.writeHead(200, {'Content-Type': 'text/html'});
@@ -53,18 +71,16 @@ app.use(cors());
 //   }
 //   next();
 // });
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(session({
-  secret: 'mysecretkey',
-  saveUninitialized: true,
-  resave: true
-}))
 app.use('/', routes);
 app.use('/users', users);
 app.use('/admins', admins);
 app.use('/products', products);
+app.get('/login', function(req,res) {
+  res.render('login', { title: 'Express' });
+})
+app.post('/login', passport.authenticate('local'), function(req, res){
+  res.redirect('/');
+})
 
 
 
