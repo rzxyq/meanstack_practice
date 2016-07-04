@@ -52,7 +52,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 //passport
 passport.use(new passportlocal.Strategy(function(username, password, done){
-  if (usename === password) {
+  if (username === password) {
     done(null, { id:12, name:username, password:password });
   } else {
     done(null, null);
@@ -75,6 +75,14 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/admins', admins);
 app.use('/products', products);
+
+app.get('/account', function(req,res) {
+  res.render('account', {
+    title: 'Login',
+    isAuthenticated: req.isAuthenticated(),
+    user: req.user
+  });
+})
 app.get('/login', function(req,res) {
   res.render('login', { title: 'Express' });
 })
