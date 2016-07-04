@@ -3,6 +3,7 @@
  */
 
 var msw = angular.module("meanstackwalkthrough", ['ngRoute']);
+
 msw.config(
     function($routeProvider) {
     $routeProvider.when('/', {
@@ -24,7 +25,8 @@ msw.config(
         //         url:'/yeah',
         //         templateUrl: 'View1.html',
         //     })
-})
+    })  
+    
     .factory('simpleFactory', function($http) {
         // $http.get('http://localhost:3000/products').then(function(res){
         //     var factory = {};
@@ -48,13 +50,14 @@ msw.config(
     .factory('complicatedFactory', function($http) {
         var dataFactory = {};
         dataFactory.getCustomers = function () {
-            data = $http.get('http://localhost:4000/products');
+            data = $http.get('http://localhost:3000/products');
 
             console.log(data);
             return data;
         };
         return dataFactory;
     })
+    
     .controller("AppCtrl", function($scope, simpleFactory){
     $scope.people = simpleFactory.getCustomers();
 })
