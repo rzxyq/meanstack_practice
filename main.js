@@ -6,15 +6,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require("mongoose");
 var cors = require("cors");
-var testMode = false;
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var products = require('./routes/products');
 var admins = require('./routes/admins');
 var config = require('./config');
-
 var app = express();
+//vars
+var testMode = false;
+//passport
+var passport = require('passport');
+var session = require('express-session');
 
 //db
 // var uristring =
@@ -28,10 +30,9 @@ mongoose.connect(config.mongoURI[process.env.NODE_ENV] || 'mongodb://localhost:2
   }
 });
 
-
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -45,19 +46,27 @@ app.use(cors());
 //   res.writeHead(200, {'Content-Type': 'text/html'});
 //   res.end(data);
 // })
+// app.use(function(req,res, next){
+//   if (req.url == '/test') {
+//     console.log('enabling test mode');
+//     testMode = true;
+//   }
+//   next();
+// });
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(session({
+  secret: 'mysecretkey',
+  saveUninitialized: true,
+  resave: true
+}))
 app.use('/', routes);
 app.use('/users', users);
 app.use('/admins', admins);
 app.use('/products', products);
 
-app.use(function(req,res, next){
-  if (req.url == '/test') {
-    console.log('enabling test mode');
-    testMode = true;
-  }
-  next();
-});
+
 
 //-------error----------------------------------
 // catch 404 and forward to error handler

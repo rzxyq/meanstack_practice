@@ -10,16 +10,19 @@
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js"></script>-->
     <script src="javascripts/angular.js"></script>
     <script src="javascripts/angular-route.js"></script>
+    <script src="app.js"></script>
     <script src="controller.js"></script>
+    <script src="services.js"></script>
+
 </head>
 <body ng-app="meanstackwalkthrough">
     <!--{{ 2+2 }}-->
     <div>
         <div ng-view></div>
     </div>
-    <h1>devider</h1>
+    <h1>Above view is customized by ng-view.</h1>
     <div ng-controller="ComplicatedCtrl" class="contatiner">
-        <h1>asdasda</h1>
+        <h1>Dummy</h1>
         Name: <input type="text" ng-model="name"/> {{ name | uppercase }}
         <ul>
             <li ng-repeat="person in people | filter:name | orderBy:'name'">{{ person.name }} - {{ person.city }}</li>
