@@ -84,6 +84,7 @@ app.use('/admins', admins);
 app.use('/products', products);
 
 app.get('/account', function(req,res) {
+  console.log(req.user);
   res.render('account', {
     title: 'Login',
     isAuthenticated: req.isAuthenticated(),
