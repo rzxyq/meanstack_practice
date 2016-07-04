@@ -10,27 +10,16 @@ var testMode = false;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var products = require('./routes/products');
 var config = require('./config');
 
 var app = express();
 
 //db
-// Here we find an appropriate database to connect to, defaulting to
-// localhost if we don't find one.
 // var uristring =
 //     process.env.MONGODB_URI ||
 //     'mongodb://104.154.252.194:27017/mydb';
-// // Makes connection asynchronously.  Mongoose will queue up database
-// // operations and release them when the connection is complete.
-// mongoose.connect(uristring, function (err, res) {
-//   if (err) {
-//     console.log ('ERROR connecting to: ' + uristring + '. ' + err);
-//   } else {
-//     console.log ('Succeeded connected to: ' + uristring);
-//   }
-// });
-// *** mongoose *** ///
-mongoose.connect(config.mongoURI[app.settings.env], function(err, res) {
+mongoose.connect(config.mongoURI[process.env.NODE_ENV] || 'mongodb://localhost:27017/mydb', function(err, res) {
   if(err) {
     console.log('Error connecting to the database. ' + err);
   } else {
@@ -61,7 +50,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', routes);
 app.use('/users', users);
-
+app.use('/products', products);
 
 app.use(function(req,res, next){
   if (req.url == '/test') {
@@ -74,46 +63,6 @@ app.use(function(req,res, next){
 // app.get('/', function(req, res) {
 //   res.render('index', { title: 'Expressssss' });
 // });
-
-// app.get('/products/:name', function(req, res){
-//   var name = req.params.name;
-//   Product.findOne({name: 'macbook'}, function(err, obj){
-//     if (err) console.log('cant find object');
-//     else console.log(obj);
-//     res.send(obj);
-//   })
-//   //for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
-//   // // get a user with ID of 1
-//   // User.findById(1, function(err, user) {
-//   //   if (err) throw err;
-//   //
-//   //   // show the one user
-//   //   console.log(user);
-//   // });
-// })
-
-app.get('/products/:id', function(req, res){
-  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
-  // get a user with ID of 1
-  console.log(req.params.id)
-  Product.findOne({"_id": req.params.id}, function(err, user) {
-    if (err) throw err;
-    // show the one user
-    console.log(user);
-    res.send(user);
-  });
-})
-
-app.put('/products/:id', function(req, res){
-  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
-  // get a user with ID of 1
-  Product.findOne({"_id": req.params.id}, function(err, user) {
-    if (err) throw err;
-    user.name = req.body.name;
-    console.log(user);
-    res.send({UPDATED: user});
-  });
-})
 
 app.get('/admin/', function(req, res){
   // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
@@ -136,18 +85,6 @@ app.get('/admins/:userid', function(req, res){
   //other test value is "_id" : 575624d9afc507ea0a127a96, should be admin1 instead of 2
 
   Admin.findOne({users:[req.params.userid]}, function(err,admin) {
-    if (err) throw err;
-    // show the one user
-    console.log(admin);
-    res.send(admin);
-  });
-})
-
-app.get('/admins2/', function(req, res){
-  // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
-  // get a user with ID of 1
-  console.log(req.params.id)
-  Admin.findOne({users:['5755cb0b815d473d09f3aaa3']}, function(err,admin) {
     if (err) throw err;
     // show the one user
     console.log(admin);
@@ -189,23 +126,6 @@ app.delete('/users/:name', function(req,res){
   var name = req.params.name;
 })
 
-app.get('/products/', function(req, res) {
-  Product.find({}, function(err, products){
-    res.send(products);
-  })
-});
-app.post('/products/', function(req, res) {
-  var name = req.body.name;
-  var b = new Product();
-  b.name=name;
-  b.save(function(){
-    res.send({
-      SUCCESS: {
-        name: name
-      }
-    });
-  });
-});
 
 
 
