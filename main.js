@@ -53,11 +53,18 @@ app.use(passport.session());
 //passport
 passport.use(new passportlocal.Strategy(function(username, password, done){
   if (username === password) {
-    done(null, { id:12, name:username, password:password });
+    done(null, { id:'123sdkjh', name:username, password:password });
   } else {
     done(null, null);
   }
 }));
+
+passport.serializeUser(function(user, done){
+  done(null, user.id);
+})
+passport.deserializeUser(function(id, done){
+  done(null, {id:id, name:id});
+})
 
 // app.use(function(req,res) {
 //   var data = '<h1>hello</h1>';
@@ -87,7 +94,7 @@ app.get('/login', function(req,res) {
   res.render('login', { title: 'Express' });
 })
 app.post('/login', passport.authenticate('local'), function(req, res){
-  res.redirect('/');
+  res.redirect('/account');
 })
 
 
