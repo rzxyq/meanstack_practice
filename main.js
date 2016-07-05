@@ -1,3 +1,5 @@
+// https://www.youtube.com/watch?v=twav6O53zIQ
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -18,12 +20,14 @@ var testMode = false;
 var passport = require('passport');
 var passportlocal = require('passport-local');
 var passporthttp = require('passport-http');
+var passportfacebook = require('passport-facebook');
 var session = require('express-session');
 
 //db
 // var uristring =
 //     process.env.MONGODB_URI ||
 //     'mongodb://104.154.252.194:27017/mydb';
+var User = require('./model/user');
 mongoose.connect(config.mongoURI[process.env.NODE_ENV] || 'mongodb://localhost:27017/meanstackwalkthrough', function(err, res) {
   if(err) {
     console.log('Error connecting to the database. ' + err);
@@ -42,12 +46,14 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+//cookies and sessions
 app.use(cookieParser());
 app.use(session({
   secret: 'mysecretkey',
   saveUninitialized: true,
   resave: true
 }))
+
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
@@ -63,6 +69,39 @@ function verifyCredentials(username, password, done){
     done(null, null);
   }
 };
+passport.use(new passportfacebook.Strategy({
+      clientID: config.facebookAuth.clientID,
+      clientSecret: config.facebookAuth.clientSecret,
+      callbackURL: config.facebookAuth.callbackURL
+    },
+    function(accessToken, refreshToken, profile, done) {
+      process.nextTick(function(){
+        User.findOne({ fbid: profile.id }, function (err, user) {
+          if (err)
+            return done(err);
+          if (user) {
+            console.log("user has data:" + user);
+            return done(null, user);
+          }
+          else {
+            var newUser = new User();
+            newUser.username = 'myusername';
+            newUser.password = 'asdfgh';
+            newUser.fbid = profile.id;
+            newUser.fbtoken = accessToken;
+            newUser.fbname = profile.name.givenName + ' ' + profile.name.familyName;
+            // newUser.email = profile.emails[0].value;
+            newUser.save(function(err){
+              console.log("newuser has data:" + newUser);
+              if(err)
+                  throw err;
+              return done(null, newUser);
+            });
+          }
+        });
+      }); //process nexttick
+    }
+));
 
 passport.serializeUser(function(user, done){
   done(null, user.id);
@@ -70,7 +109,7 @@ passport.serializeUser(function(user, done){
 passport.deserializeUser(function(id, done){
   done(null, {id:id, name:id});
 })
-app.use('/products', passport.authenticate('basic'));
+app.use('/products', passport.authenticate('basic', {session: false}));
 
 // function ensureAuthenticated(req, res, next) {
 //   if (req.isAuthenticated()){
@@ -80,6 +119,7 @@ app.use('/products', passport.authenticate('basic'));
 //   }
 // }
 
+//routes---------------------------------------------------------------
 // app.use(function(req,res) {
 //   var data = '<h1>hello</h1>';
 //   res.writeHead(200, {'Content-Type': 'text/html'});
@@ -117,6 +157,16 @@ app.get('/logout', function(req, res){
   res.redirect('/login');
 })
 
+//facebook
+app.get('/auth/facebook',
+    passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { failureRedirect: '/login' }),
+    function(req, res) {
+      // Successful authentication, redirect home.
+      res.redirect('/');
+    });
 
 
 //-------error----------------------------------

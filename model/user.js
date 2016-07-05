@@ -17,7 +17,11 @@ var userSchema = new Schema({
         website: String
     },
     created_at: Date,
-    updated_at: Date
+    updated_at: Date,
+    fbid: String,
+    fbtoken: String,
+    fbname: String,
+    email: String
 });
 
 
