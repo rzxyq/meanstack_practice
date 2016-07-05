@@ -72,7 +72,8 @@ function verifyCredentials(username, password, done){
 passport.use(new passportfacebook.Strategy({
       clientID: config.facebookAuth.clientID,
       clientSecret: config.facebookAuth.clientSecret,
-      callbackURL: config.facebookAuth.callbackURL
+      callbackURL: config.facebookAuth.callbackURL,
+      profileFields: ['id', 'name', 'photos', 'emails']
     },
     function(accessToken, refreshToken, profile, done) {
       process.nextTick(function(){
@@ -90,7 +91,7 @@ passport.use(new passportfacebook.Strategy({
             newUser.fbid = profile.id;
             newUser.fbtoken = accessToken;
             newUser.fbname = profile.name.givenName + ' ' + profile.name.familyName;
-            // newUser.email = profile.emails[0].value;
+            newUser.email = profile.emails[0].value;
             newUser.save(function(err){
               console.log("newuser has data:" + newUser);
               if(err)
@@ -159,13 +160,13 @@ app.get('/logout', function(req, res){
 
 //facebook
 app.get('/auth/facebook',
-    passport.authenticate('facebook'));
+    passport.authenticate('facebook',{scope: ['email']}));
 
 app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/');
+      res.redirect('/account');
     });
 
 
