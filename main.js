@@ -17,19 +17,21 @@ var testMode = false;
 //passport
 var passport = require('passport');
 var passportlocal = require('passport-local');
+var passporthttp = require('passport-http');
 var session = require('express-session');
 
 //db
 // var uristring =
 //     process.env.MONGODB_URI ||
 //     'mongodb://104.154.252.194:27017/mydb';
-mongoose.connect(config.mongoURI[process.env.NODE_ENV] || 'mongodb://localhost:27017/mydb', function(err, res) {
+mongoose.connect(config.mongoURI[process.env.NODE_ENV] || 'mongodb://localhost:27017/meanstackwalkthrough', function(err, res) {
   if(err) {
     console.log('Error connecting to the database. ' + err);
   } else {
     console.log('Connected to Database: ' + config.mongoURI[app.settings.env]);
   }
 });
+// require('./insert_obj');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,14 +52,17 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+
 //passport
-passport.use(new passportlocal.Strategy(function(username, password, done){
+passport.use(new passportlocal.Strategy(verifyCredentials));
+passport.use(new passporthttp.BasicStrategy(verifyCredentials));
+function verifyCredentials(username, password, done){
   if (username === password) {
     done(null, { id:'123sdkjh', name:username, password:password });
   } else {
     done(null, null);
   }
-}));
+};
 
 passport.serializeUser(function(user, done){
   done(null, user.id);
@@ -65,6 +70,15 @@ passport.serializeUser(function(user, done){
 passport.deserializeUser(function(id, done){
   done(null, {id:id, name:id});
 })
+app.use('/products', passport.authenticate('basic'));
+
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()){
+//     next();
+//   } else {
+//     res.redirect('/login');
+//   }
+// }
 
 // app.use(function(req,res) {
 //   var data = '<h1>hello</h1>';
@@ -96,6 +110,11 @@ app.get('/login', function(req,res) {
 })
 app.post('/login', passport.authenticate('local'), function(req, res){
   res.redirect('/account');
+})
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/login');
 })
 
 

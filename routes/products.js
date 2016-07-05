@@ -2,6 +2,14 @@ var express = require('express');
 var router = express.Router();
 var Product = require('../model/product');
 
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()){
+        next();
+    } else {
+        // res.redirect('/login');
+        res.send(403);
+    }
+}
 
 
 router.get('/:id', function(req, res){
@@ -28,7 +36,8 @@ router.put('/:id', function(req, res){
 })
 
 
-router.get('/', function(req, res) {
+//this uses cookies, api should use headers instead of cookies
+router.get('/', ensureAuthenticated, function(req, res) {
     Product.find({}, function(err, products){
         res.send(products);
     })

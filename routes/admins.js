@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Admin = require('../model/admin');
+var User = require('../model/user');
+
 
 router.get('/', function(req, res){
     // for more documentation see https://scotch.io/tutorials/using-mongoosejs-in-node-js-and-mongodb-applications
