@@ -111,6 +111,7 @@ passport.use(new passportfacebook.Strategy({
     }
 ));
 //passport linkedin
+//TODO: https://github.com/jaredhanson/passport-linkedin
 passport.use(new passportlinkedin.Strategy({
       consumerKey: config.linkedinAuth.clientAPIKey,
       consumerSecret: '',
