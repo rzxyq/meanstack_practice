@@ -21,7 +21,8 @@ var userSchema = new Schema({
     fbid: String,
     fbtoken: String,
     fbname: String,
-    email: String
+    email: String,
+    linkedinId: String
 });
 
 

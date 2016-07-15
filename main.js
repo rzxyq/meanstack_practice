@@ -21,6 +21,7 @@ var passport = require('passport');
 var passportlocal = require('passport-local');
 var passporthttp = require('passport-http');
 var passportfacebook = require('passport-facebook');
+var passportlinkedin = require('passport-linkedin');
 var session = require('express-session');
 
 //db
@@ -59,16 +60,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
-//passport
+//passport local
 passport.use(new passportlocal.Strategy(verifyCredentials));
-passport.use(new passporthttp.BasicStrategy(verifyCredentials));
-function verifyCredentials(username, password, done){
-  if (username === password) {
-    done(null, { id:'123sdkjh', name:username, password:password });
-  } else {
-    done(null, null);
-  }
-};
+passport.serializeUser(function(user, done){
+  done(null, user.id);
+})
+passport.deserializeUser(function(id, done){
+  done(null, {id:id, name:id});
+})
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()){
+//     next();
+//   } else {
+//     res.redirect('/login');
+//   }
+// }
+//passport facebook
 passport.use(new passportfacebook.Strategy({
       clientID: config.facebookAuth.clientID,
       clientSecret: config.facebookAuth.clientSecret,
@@ -103,24 +110,58 @@ passport.use(new passportfacebook.Strategy({
       }); //process nexttick
     }
 ));
-
-passport.serializeUser(function(user, done){
-  done(null, user.id);
-})
-passport.deserializeUser(function(id, done){
-  done(null, {id:id, name:id});
-})
+//passport linkedin
+passport.use(new passportlinkedin.Strategy({
+      consumerKey: config.linkedinAuth.clientAPIKey,
+      consumerSecret: '',
+      callbackURL: config.linkedinAuth.callbackURL
+    },
+    function(token, tokenSecret, profile, done) {
+      process.nextTick(function(){
+        User.findOne({ linkedinId: profile.id }, function (err, user) {
+          if (err)
+            return done(err);
+          if (user) {
+            console.log("user has data:" + user);
+            return done(null, user);
+          }
+          else {
+            var newUser = new User();
+            newUser.username = 'myusername';
+            newUser.password = 'asdfgh';
+            newUser.fbid = profile.id;
+            newUser.fbtoken = accessToken;
+            newUser.fbname = profile.name.givenName + ' ' + profile.name.familyName;
+            newUser.email = profile.emails[0].value;
+            newUser.save(function(err){
+              console.log("newuser has data:" + newUser);
+              if(err)
+                throw err;
+              return done(null, newUser);
+            });
+          }
+        });
+      }); //process nexttick
+    }
+));
+//passport http
+passport.use(new passporthttp.BasicStrategy(verifyCredentials));
+function verifyCredentials(username, password, done){
+  if (username === password) {
+    done(null, { id:'123sdkjh', name:username, password:password });
+  } else {
+    done(null, null);
+  }
+};
 app.use('/products', passport.authenticate('basic', {session: false}));
 
-// function ensureAuthenticated(req, res, next) {
-//   if (req.isAuthenticated()){
-//     next();
-//   } else {
-//     res.redirect('/login');
-//   }
-// }
 
-//routes---------------------------------------------------------------
+
+
+
+
+
+//routes--------------------------------------------------------------------------------------------------------------
 // app.use(function(req,res) {
 //   var data = '<h1>hello</h1>';
 //   res.writeHead(200, {'Content-Type': 'text/html'});
