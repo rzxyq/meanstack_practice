@@ -4,7 +4,7 @@
 
 angular.module("meanstackwalkthrough", ['ngRoute', 'meanstackwalkthrough.services', 'meanstackwalkthrough.controllers'])
 
-    .config(
+    .config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/view1/:id', {
             controller: 'AppCtrl',
@@ -25,5 +25,5 @@ angular.module("meanstackwalkthrough", ['ngRoute', 'meanstackwalkthrough.service
         //         url:'/yeah',
         //         templateUrl: 'View1.html',
         //     })
-    });
+    }]);
 

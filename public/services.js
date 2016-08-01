@@ -1,6 +1,6 @@
 angular.module("meanstackwalkthrough.services", [])
 
-    .factory('simpleFactory', function($http) {
+    .factory('simpleFactory', ['$http', function($http) {
         // $http.get('http://localhost:3000/products').then(function(res){
         //     var factory = {};
         //     var people = [{name:'dave',city:'NY'},
@@ -19,12 +19,12 @@ angular.module("meanstackwalkthrough.services", [])
             return people;
         }
         return factory;
-    })
-    .factory('complicatedFactory', function($http) {
+    }])
+    .factory('complicatedFactory', ['$http', function($http) {
         var dataFactory = {};
         dataFactory.getCustomers = function () {
             data = $http.get('http://localhost:3000/products');
             return data;
         };
         return dataFactory;
-    })
+    }])

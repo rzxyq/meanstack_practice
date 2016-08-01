@@ -54,7 +54,7 @@ angular.module("meanstackwalkthrough.controllers", [])
     function onLinkedInLoad() {
         IN.Event.on(IN, "auth", getProfileData);
     }
-    
+
     // Use the API call wrapper to request the member's basic profile data
     function getProfileData() {
         IN.API.Raw("/people/~").result(onSuccess).error(onError);
