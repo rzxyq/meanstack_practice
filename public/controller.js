@@ -1,7 +1,10 @@
 angular.module("meanstackwalkthrough.controllers", [])
 
     .controller("AppCtrl", function($scope, simpleFactory){
-        $scope.people = simpleFactory.getCustomers();
+        $scope.init = function(){
+            $scope.people = simpleFactory.getCustomers();
+        };
+        $scope.people =  simpleFactory.getCustomers();
     })
     .controller('IdCtrl', function($scope, $routeParams) {
             $scope.id = $routeParams.id;

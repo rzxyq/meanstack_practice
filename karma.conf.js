@@ -17,8 +17,8 @@ module.exports = function(config) {
     files: [
       'public/javascripts/angular.js',
         'public/javascripts/angular-route.js',
-      'public/*.js',
       'public/javascripts/angular-mocks.js',
+      'public/*.js',
         'tests/test-frontend.js'
     ],
 
